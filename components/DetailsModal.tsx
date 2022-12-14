@@ -6,6 +6,8 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { BreweryData } from "../pages";
@@ -26,6 +28,19 @@ function DetailsModal(props: SimpleDialogProps) {
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>{brewery.name}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          <div>
+            <div>
+              {brewery.street} <br /> {brewery.city}, {brewery.state}{" "}
+              {brewery.postal_code}
+            </div>
+            <div>
+                {brewery.brewery_type}
+            </div>
+          </div>
+        </DialogContentText>
+      </DialogContent>
     </Dialog>
   );
 }
