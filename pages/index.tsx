@@ -1,16 +1,35 @@
 import Head from "next/head";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, FormControl, List, ListItem } from "@mui/material";
 import { useState } from "react";
+import DetailsModal from "../components/DetailsModal";
 
-interface BreweryData {
+export interface BreweryData {
   id: string;
   name: string;
   brewery_type: string;
+  street: string;
+  state: string;
+  city: string;
+  postal_code: string;
+  latitude: string;
+  longitude: string;
+  website_url: string;
 }
 
 export default function Home() {
-  const [input, setInput] = useState(""); // User input for brewery query
-  const [breweries, setBreweries] = useState([]); // Array of breweries that will be set after fetching
+  const [input, setInput] = useState("");
+  const [selectedBrewery, setSelectedBrewery] = useState<BreweryData | null>(null);
+  const [breweries, setBreweries] = useState([]);
+  const handleOpen = (brewery: BreweryData) => () => {
+    setSelectedBrewery((selectedCampaign) =>
+      selectedBrewery ? null : brewery
+    );
+  };
+
+  const handleClose = () => {
+    setSelectedBrewery(null);
+  };
+
   const callAPI = async () => {
     try {
       const res = await fetch(
@@ -31,20 +50,43 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <TextField
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <Button onClick={callAPI}>click here</Button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            callAPI();
+          }}
+        >
+          <FormControl>
+            <TextField
+              id="outlined-basic"
+              label="Outlined"
+              variant="outlined"
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <Button type="submit">click here</Button>
+          </FormControl>
+        </form>
       </div>
       <div>
         {breweries.map((brewery: BreweryData) => (
-          <li className="list-item" key={brewery.id}>
-            <div>{brewery.name}</div>
-            <div>{brewery.brewery_type}</div>
-          </li>
+          <List key={brewery.id}>
+            <ListItem>
+              <div>{brewery.name}</div>
+              <div>
+                {brewery.street} <br /> {brewery.city}, {brewery.state}{" "}
+                {brewery.postal_code}
+              </div>
+              <div>{brewery.brewery_type}</div>
+              <Button variant="outlined" onClick={handleOpen(brewery)}>
+                View Details
+              </Button>
+              <DetailsModal
+                open={selectedBrewery?.id === brewery.id}
+                brewery={brewery}
+                onClose={handleClose}
+              />
+            </ListItem>
+          </List>
         ))}
       </div>
     </div>
