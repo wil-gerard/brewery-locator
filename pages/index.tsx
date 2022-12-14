@@ -14,10 +14,7 @@ export default function Home() {
   const callAPI = async () => {
     try {
       const res = await fetch(
-        `https://api.openbrewerydb.org/breweries?by_city=${input}`,
-        {
-          method: "GET",
-        }
+        `https://api.openbrewerydb.org/breweries/search?query=${input}`
       );
       const data = await res.json();
       setBreweries(data);
