@@ -2,11 +2,9 @@ import Head from "next/head";
 import {
   Button,
   TextField,
-  FormControl,
   List,
   ListItem,
   IconButton,
-  Container,
   Box,
 } from "@mui/material";
 import { useState } from "react";
@@ -53,6 +51,14 @@ export default function Home() {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const defaultProps = {
+    center: {
+      lat: 59.955413,
+      lng: 30.337844,
+    },
+    zoom: 11,
   };
   return (
     <div>
