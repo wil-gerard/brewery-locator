@@ -3,17 +3,19 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
+  Link,
+  Box,
+  Typography,
 } from "@mui/material";
 import { BreweryData } from "../pages";
 import GoogleMapReact from "google-map-react";
+import LocationPin from "./LocationPin";
 
 export interface SimpleDialogProps {
   open: boolean;
   brewery: BreweryData;
   onClose: () => void;
 }
-
-const MapMarker = ({ text, lat, lng }: {text: string; lat: string; lng: string}) => <div>{text}</div>;
 
 function DetailsModal(props: SimpleDialogProps) {
   const { onClose, open, brewery } = props;
@@ -35,25 +37,41 @@ function DetailsModal(props: SimpleDialogProps) {
       <DialogTitle>{brewery.name}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-              {brewery.street} <br /> {brewery.city}, {brewery.state}{" "}
-              {brewery.postal_code}
+          <Typography>
+            <Typography sx={{ display: "inline" }} fontWeight="500">
+              Address:
+            </Typography>{" "}
+            {brewery.street} {brewery.city}, {brewery.state},{" "}
+            {brewery.postal_code}
+          </Typography>
+          <Typography>
+            <Typography sx={{ display: "inline" }} fontWeight="500">
+              Website:{" "}
+            </Typography>
+            <Link
+              href={brewery.website_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {brewery.website_url}
+            </Link>
+          </Typography>
         </DialogContentText>
-        <DialogContentText>
-        {brewery.brewery_type}
-        </DialogContentText>
-        <div style={{ height: "100vh", width: "100%" }}>
+        <Box height="50vh" mt={2}>
           <GoogleMapReact
-            defaultCenter={{lat: Number(brewery.latitude), lng: Number(brewery.longitude)}}
+            defaultCenter={{
+              lat: Number(brewery.latitude),
+              lng: Number(brewery.longitude),
+            }}
             defaultZoom={defaultProps.zoom}
-            yesIWantToUseGoogleMapApiInternals
           >
-            <MapMarker
+            <LocationPin
               lat={brewery.latitude}
               lng={brewery.longitude}
               text={brewery.name}
             />
           </GoogleMapReact>
-        </div>
+        </Box>
       </DialogContent>
     </Dialog>
   );
