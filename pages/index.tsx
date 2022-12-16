@@ -6,6 +6,8 @@ import {
   ListItem,
   IconButton,
   Box,
+  CircularProgress,
+  Container,
 } from "@mui/material";
 import { useState } from "react";
 import DetailsModal from "../components/DetailsModal";
@@ -25,6 +27,7 @@ export interface BreweryData {
 }
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
   const [selectedBrewery, setSelectedBrewery] = useState<BreweryData | null>(
     null
@@ -41,6 +44,7 @@ export default function Home() {
   };
 
   const callAPI = async () => {
+    setLoading(true);
     try {
       const res = await fetch(
         `https://api.openbrewerydb.org/breweries/search?query=${input}`
@@ -50,6 +54,8 @@ export default function Home() {
       console.log(data);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,6 +92,11 @@ export default function Home() {
         </Box>
       </form>
       <div>
+        {loading && (
+          <Container>
+            <CircularProgress />
+          </Container>
+        )}
         {breweries.map((brewery: BreweryData) => (
           <List key={brewery.id}>
             <ListItem>
