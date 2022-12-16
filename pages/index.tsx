@@ -135,17 +135,39 @@ export default function Home() {
                     secondary={
                       <>
                         <Typography>
-                          {brewery.street} <br /> {brewery.city},{" "}
-                          {brewery.state} {brewery.postal_code}
+                          <Typography
+                            sx={{ display: "inline" }}
+                            fontWeight="500"
+                          >
+                            Address:
+                          </Typography>{" "}
+                          {brewery.street} {brewery.city}, {brewery.state},{" "}
+                          {brewery.postal_code}
                         </Typography>
-                        <Typography>{brewery.brewery_type}</Typography>
-                        <Link
-                          href={brewery.website_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {brewery.website_url}
-                        </Link>
+                        <Typography>
+                          <Typography
+                            sx={{ display: "inline" }}
+                            fontWeight="500"
+                          >
+                            Type:{" "}
+                          </Typography>
+                          {brewery.brewery_type}
+                        </Typography>
+                        <Typography>
+                          <Typography
+                            sx={{ display: "inline" }}
+                            fontWeight="500"
+                          >
+                            Website:{" "}
+                          </Typography>
+                          <Link
+                            href={brewery.website_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {brewery.website_url}
+                          </Link>
+                        </Typography>
                       </>
                     }
                   ></ListItemText>
