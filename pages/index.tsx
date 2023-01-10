@@ -118,7 +118,7 @@ export default function Home() {
               inputProps={{ "aria-label": "Search for breweries by keyword" }}
               onChange={(e) => setInput(e.target.value)}
             />
-            <LoadingButton aria-label="search" type="button" loading={loading}>
+            <LoadingButton aria-label="search" type="submit" loading={loading}>
               <SearchIcon />
             </LoadingButton>
           </Paper>
