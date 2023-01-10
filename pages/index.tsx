@@ -51,12 +51,17 @@ export default function Home() {
   const callAPI = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://api.openbrewerydb.org/breweries/search?query=${input}`
+      const byCityResponse = await fetch(
+        `https://api.openbrewerydb.org/breweries?by_city=${input}&per_page=50`
       );
-      const data = await res.json();
-      setBreweries(data);
-      console.log(data);
+      const metadataResponse = await fetch(
+        `https://api.openbrewerydb.org/breweries/meta?by_city=${input}`
+      );
+      const byCityData = await byCityResponse.json();
+      const metadata = await metadataResponse.json();
+      setBreweries(byCityData);
+      console.log(byCityData);
+      console.log(metadata)
     } catch (err) {
       console.log(err);
     } finally {
