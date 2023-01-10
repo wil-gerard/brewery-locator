@@ -18,7 +18,7 @@ function BreweryListItem({ brewery }: Props) {
   const [selectedBrewery, setSelectedBrewery] = useState<BreweryData | null>(
     null
   );
-  
+
   const handleOpen = (brewery: BreweryData) => () => {
     setSelectedBrewery(() => (selectedBrewery ? null : brewery));
   };
@@ -51,13 +51,17 @@ function BreweryListItem({ brewery }: Props) {
                 <Typography sx={{ display: "inline" }} fontWeight="500">
                   Website:{" "}
                 </Typography>
-                <Link
-                  href={brewery?.website_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {brewery?.website_url}
-                </Link>
+                {brewery.website_url ? (
+                  <Link
+                    href={brewery?.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {brewery?.website_url}
+                  </Link>
+                ) : (
+                  "No website available"
+                )}
               </Typography>
             </>
           }
