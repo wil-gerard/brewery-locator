@@ -1,19 +1,14 @@
 import Head from "next/head";
 import {
-  Button,
   List,
-  ListItem,
   Box,
   Container,
   Typography,
   Paper,
   InputBase,
   Link,
-  Divider,
-  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
-import DetailsModal from "../components/DetailsModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { LoadingButton } from "@mui/lab";
 import { AcUnit } from "@mui/icons-material";
@@ -49,8 +44,6 @@ export default function Home() {
       const byCityData = await byCityResponse.json();
       const metadata = await metadataResponse.json();
       setBreweries(byCityData);
-      console.log(byCityData);
-      console.log(metadata);
     } catch (err) {
       console.log(err);
     } finally {
