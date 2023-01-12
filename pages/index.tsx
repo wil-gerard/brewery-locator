@@ -1,19 +1,14 @@
 import Head from "next/head";
 import {
-  Button,
   List,
-  ListItem,
   Box,
   Container,
   Typography,
   Paper,
   InputBase,
   Link,
-  Divider,
-  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
-import DetailsModal from "../components/DetailsModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { LoadingButton } from "@mui/lab";
 import { AcUnit } from "@mui/icons-material";
@@ -40,17 +35,15 @@ export default function Home() {
   const callAPI = async () => {
     setLoading(true);
     try {
-      const byCityResponse = await fetch(
-        `https://api.openbrewerydb.org/breweries?by_city=${input}&per_page=50`
+      const byKeywordResponse = await fetch(
+        `https://api.openbrewerydb.org/breweries/search?query=${input}`
       );
       const metadataResponse = await fetch(
         `https://api.openbrewerydb.org/breweries/meta?by_city=${input}`
       );
-      const byCityData = await byCityResponse.json();
+      const byCityData = await byKeywordResponse.json();
       const metadata = await metadataResponse.json();
       setBreweries(byCityData);
-      console.log(byCityData);
-      console.log(metadata);
     } catch (err) {
       console.log(err);
     } finally {
