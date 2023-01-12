@@ -1,22 +1,18 @@
 import Head from "next/head";
 import {
-  Button,
   List,
-  ListItem,
   Box,
   Container,
   Typography,
   Paper,
   InputBase,
   Link,
-  Divider,
-  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
-import DetailsModal from "../components/DetailsModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { LoadingButton } from "@mui/lab";
 import { AcUnit } from "@mui/icons-material";
+import BreweryListItem from "../components/BreweryListItem";
 
 export interface BreweryData {
   id: string;
@@ -34,29 +30,20 @@ export interface BreweryData {
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
-  const [selectedBrewery, setSelectedBrewery] = useState<BreweryData | null>(
-    null
-  );
   const [breweries, setBreweries] = useState([]);
-  const handleOpen = (brewery: BreweryData) => () => {
-    setSelectedBrewery((selectedCampaign) =>
-      selectedBrewery ? null : brewery
-    );
-  };
-
-  const handleClose = () => {
-    setSelectedBrewery(null);
-  };
 
   const callAPI = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
+      const byKeywordResponse = await fetch(
         `https://api.openbrewerydb.org/breweries/search?query=${input}`
       );
-      const data = await res.json();
-      setBreweries(data);
-      console.log(data);
+      const metadataResponse = await fetch(
+        `https://api.openbrewerydb.org/breweries/meta?by_city=${input}`
+      );
+      const byCityData = await byKeywordResponse.json();
+      const metadata = await metadataResponse.json();
+      setBreweries(byCityData);
     } catch (err) {
       console.log(err);
     } finally {
@@ -113,7 +100,7 @@ export default function Home() {
               inputProps={{ "aria-label": "Search for breweries by keyword" }}
               onChange={(e) => setInput(e.target.value)}
             />
-            <LoadingButton aria-label="search" type="button" loading={loading}>
+            <LoadingButton aria-label="search" type="submit" loading={loading}>
               <SearchIcon />
             </LoadingButton>
           </Paper>
@@ -128,60 +115,10 @@ export default function Home() {
         >
           <List>
             {breweries.map((brewery: BreweryData) => (
-              <>
-                <ListItem key={brewery.id}>
-                  <ListItemText
-                    primary={brewery.name}
-                    secondary={
-                      <>
-                        <Typography>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            fontWeight="500"
-                          >
-                            Address:
-                          </Typography>{" "}
-                          {brewery.street} {brewery.city}, {brewery.state},{" "}
-                          {brewery.postal_code}
-                        </Typography>
-                        <Typography>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            fontWeight="500"
-                          >
-                            Type:{" "}
-                          </Typography>
-                          {brewery.brewery_type}
-                        </Typography>
-                        <Typography>
-                          <Typography
-                            sx={{ display: "inline" }}
-                            fontWeight="500"
-                          >
-                            Website:{" "}
-                          </Typography>
-                          <Link
-                            href={brewery.website_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {brewery.website_url}
-                          </Link>
-                        </Typography>
-                      </>
-                    }
-                  ></ListItemText>
-                  <Button variant="outlined" onClick={handleOpen(brewery)}>
-                    View Details
-                  </Button>
-                  <DetailsModal
-                    open={selectedBrewery?.id === brewery.id}
-                    brewery={brewery}
-                    onClose={handleClose}
-                  />
-                </ListItem>
-                <Divider />
-              </>
+              <BreweryListItem
+                key={brewery.id}
+                brewery={brewery}
+              />
             ))}
           </List>
         </Paper>

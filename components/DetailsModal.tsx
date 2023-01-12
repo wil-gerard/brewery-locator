@@ -48,13 +48,17 @@ function DetailsModal(props: SimpleDialogProps) {
             <Typography sx={{ display: "inline" }} fontWeight="500">
               Website:{" "}
             </Typography>
-            <Link
-              href={brewery.website_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {brewery.website_url}
-            </Link>
+            {brewery.website_url ? (
+              <Link
+                href={brewery.website_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {brewery?.website_url}
+              </Link>
+            ) : (
+              "No website available"
+            )}
           </Typography>
         </DialogContentText>
         <Box height="50vh" mt={2}>
