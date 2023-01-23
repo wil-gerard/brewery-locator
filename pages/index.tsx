@@ -38,18 +38,16 @@ export default function Home() {
       const byKeywordResponse = await fetch(
         `https://api.openbrewerydb.org/breweries/search?query=${input}`
       );
-      const metadataResponse = await fetch(
-        `https://api.openbrewerydb.org/breweries/meta?by_city=${input}`
-      );
-      const byCityData = await byKeywordResponse.json();
-      const metadata = await metadataResponse.json();
-      setBreweries(byCityData);
+      const byKeywordData = await byKeywordResponse.json();
+      setBreweries(byKeywordData);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
   };
+
+  let numberOfBreweries = Object.keys(breweries).length;
 
   return (
     <Box>
@@ -115,13 +113,15 @@ export default function Home() {
         >
           <List>
             {breweries.map((brewery: BreweryData) => (
-              <BreweryListItem
-                key={brewery.id}
-                brewery={brewery}
-              />
+              <BreweryListItem key={brewery.id} brewery={brewery} />
             ))}
           </List>
         </Paper>
+        {numberOfBreweries > 0 && (
+          <Box paddingTop="8px">
+            <Typography>Displaying {numberOfBreweries} results</Typography>
+          </Box>
+        )}
       </Container>
     </Box>
   );
